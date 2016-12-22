@@ -3,6 +3,7 @@ package ru.mail.polis;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 //TODO: write code here
 public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
@@ -313,6 +314,7 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
             Node removeable = getElement(value);
             Node chager = findMostAvailableNode(removeable);
             swapNodesAndDelete(removeable, chager);
+            size--;
             return true;
         } catch (NullPointerException e) {
             return false;
@@ -335,39 +337,61 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
             this.parent = parent;
             balanceFactor = 0;
         }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("N{");
+            sb.append("d=").append(data);
+            if (leftChild != null) {
+                sb.append(", l=").append(leftChild);
+            }
+            if (rightChild != null) {
+                sb.append(", r=").append(rightChild);
+            }
+            sb.append('}');
+            return sb.toString();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "BST{" + root + "}";
     }
 
     public static void main(String[] args) {
         AVLTree<Integer> tree = new AVLTree<>();
         tree.add(10);
-        tree.add(20);
-        tree.add(30);
-        tree.add(40);
-        tree.add(50);
-
-        System.out.println(tree.first());
-        System.out.println(tree.last());
-
-        ArrayList<Integer> list = (ArrayList<Integer>) tree.inorderTraverse();
-        for (int i : list) {
-            System.out.println(i);
-        }
-
-        System.out.println(tree.contains(30));
-        System.out.println(tree.contains(10));
-        System.out.println(tree.contains(50));
-        System.out.println(tree.contains(70));
-        System.out.println(tree.contains(0));
-
-        tree.remove(50);
+        tree.add(5);
+        tree.add(15);
+        System.out.println(tree.inorderTraverse());
+        System.out.println(tree.size);
+        System.out.println(tree);
         tree.remove(10);
-        System.out.println();
+        tree.remove(15);
+        System.out.println(tree.size);
+        System.out.println(tree);
+        tree.remove(5);
+        System.out.println(tree.size);
+        System.out.println(tree);
+        tree.add(15);
+        System.out.println(tree.size);
+        System.out.println(tree);
 
-        list = (ArrayList<Integer>) tree.inorderTraverse();
-        for (int i : list) {
-            System.out.println(i);
+        System.out.println("------------");
+        Random rnd = new Random();
+        tree = new AVLTree<>();
+        for (int i = 0; i < 15; i++) {
+            tree.add(rnd.nextInt(50));
         }
-
-        tree.add(1000);
+        System.out.println(tree.inorderTraverse());
+        tree = new AVLTree<>((v1, v2) -> {
+            // Even first
+            final int c = Integer.compare(v1 % 2, v2 % 2);
+            return c != 0 ? c : Integer.compare(v1, v2);
+        });
+        for (int i = 0; i < 15; i++) {
+            tree.add(rnd.nextInt(50));
+        }
+        System.out.println(tree.inorderTraverse());
     }
 }
