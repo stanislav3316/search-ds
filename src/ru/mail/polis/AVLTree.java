@@ -1,9 +1,6 @@
 package ru.mail.polis;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 //TODO: write code here
 public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
@@ -22,8 +19,8 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
 
     @Override
     public E first() {
-        if (root == null) {
-            return null;
+        if (isEmpty()) {
+            throw new NoSuchElementException();
         }
 
         Node curr = root;
@@ -42,8 +39,8 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
 
     @Override
     public E last() {
-        if (root == null) {
-            return null;
+        if (isEmpty()) {
+            throw new NoSuchElementException();
         }
 
         Node curr = root;
@@ -62,7 +59,7 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
 
     @Override
     public List<E> inorderTraverse() {
-        List<E> list = new ArrayList<E>(size);
+        List<E> list = new ArrayList<>(size);
         inorderTraverse(root, list);
         return list;
     }
@@ -71,14 +68,21 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
         if (curr == null) {
             return;
         }
-        inorderTraverse(curr.leftChild, list);
+
+        if (curr.leftChild != null) {
+            inorderTraverse(curr.leftChild, list);
+        }
+
         list.add(curr.data);
-        inorderTraverse(curr.rightChild, list);
+
+        if (curr.rightChild != null) {
+            inorderTraverse(curr.rightChild, list);
+        }
     }
 
     @Override
     public int size() {
-        return size();
+        return size;
     }
 
     @Override
@@ -107,14 +111,15 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
 
     @Override
     public boolean add(E data) {
-        try {
+        Node exist = getElement(data);
+
+        if (exist == null) {
             add(data, root);
             size++;
-        } catch (Exception e) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private void add(E data, Node currentNode) {
@@ -310,15 +315,16 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
 
     @Override
     public boolean remove(E value) {
-        try {
-            Node removeable = getElement(value);
-            Node chager = findMostAvailableNode(removeable);
-            swapNodesAndDelete(removeable, chager);
-            size--;
-            return true;
-        } catch (NullPointerException e) {
+        Node removeable = getElement(value);
+
+        if (removeable == null) {
             return false;
         }
+
+        Node changer = findMostAvailableNode(removeable);
+        swapNodesAndDelete(removeable, changer);
+        size--;
+        return true;
     }
 
     private int compare(E v1, E v2) {
@@ -384,6 +390,11 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
             tree.add(rnd.nextInt(50));
         }
         System.out.println(tree.inorderTraverse());
+
+        for (int i : tree.inorderTraverse()) {
+            System.out.println(i);
+        }
+
         tree = new AVLTree<>((v1, v2) -> {
             // Even first
             final int c = Integer.compare(v1 % 2, v2 % 2);
