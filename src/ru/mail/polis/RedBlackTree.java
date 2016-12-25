@@ -60,8 +60,8 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
 
     @Override
     public T first() {
-        if (root == null) {
-            return null;
+        if (isEmpty()) {
+            throw new NoSuchElementException();
         }
 
         Node curr = root;
@@ -80,8 +80,8 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
 
     @Override
     public T last() {
-        if (root == null) {
-            return null;
+        if (isEmpty()) {
+            throw new NoSuchElementException();
         }
 
         Node curr = root;
@@ -136,10 +136,15 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
         Node curr = root;
 
         if (value == null) {
-            throw new NullPointerException("Null Value");
+            throw new NullPointerException();
         }
 
-        while (curr != null && compare(curr.data, value) != 0) {
+        while (curr != null && !curr.equals(NIL)) {
+            int num = compare(curr.data, value);
+            if (num == 0) {
+                break;
+            }
+
             if (compare(curr.data, value) < 0) {
                 curr = curr.right;
             } else {
@@ -147,7 +152,7 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
             }
         }
 
-        return curr != null;
+        return curr != null && !curr.equals(NIL) && curr.data.compareTo(value) == 0;
     }
 
     @Override
@@ -475,11 +480,30 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
 
     public static void main(String[] args) {
         RedBlackTree<Integer> tree = new RedBlackTree<>();
-        tree.add(10);
-        tree.add(0);
-        tree.add(20);
-        tree.add(15);
+        System.out.println(tree.contains(10));
+        System.out.println(tree.contains(1));
+        tree.add(1);
+        System.out.println(tree.contains(0));
+        tree.add(4);
+        System.out.println(tree.contains(4));
         System.out.println(tree.first());
         System.out.println(tree.last());
+        System.out.println(tree.remove(1));
+        System.out.println(tree.remove(1));
+        System.out.println(tree.first());
+        System.out.println(tree.last());
+        System.out.println(tree.size());
+        tree.add(10);
+        tree.add(20);
+        tree.add(30);
+        tree.add(40);
+        for (int i : tree.inorderTraverse()) {
+            System.out.println(i);
+        }
+
+        System.out.println(tree.size());
+        System.out.println(tree.contains(40));
+        System.out.println(tree.contains(30));
+        System.out.println(tree.contains(0));
     }
 }
