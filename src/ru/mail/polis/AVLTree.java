@@ -111,6 +111,10 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
 
     @Override
     public boolean add(E data) {
+        if (data == null) {
+            throw new NullPointerException();
+        }
+
         Node exist = getElement(data);
 
         if (exist == null) {
@@ -315,6 +319,10 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
 
     @Override
     public boolean remove(E value) {
+        if (value == null) {
+            throw new NullPointerException();
+        }
+
         Node removeable = getElement(value);
 
         if (removeable == null) {
@@ -367,6 +375,7 @@ public class AVLTree<E extends Comparable<E>> implements ISortedSet<E> {
     public static void main(String[] args) {
         AVLTree<Integer> tree = new AVLTree<>();
         tree.add(10);
+        System.out.println(tree.contains(10));
         tree.add(5);
         tree.add(15);
         System.out.println(tree.inorderTraverse());
