@@ -65,7 +65,7 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
         }
 
         Node curr = root;
-        while (curr.left != null) {
+        while (curr.left != null && !curr.left.equals(NIL)) {
             curr = curr.left;
         }
 
@@ -85,7 +85,7 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
         }
 
         Node curr = root;
-        while (curr.right != null) {
+        while (curr.right != null && !curr.right.equals(NIL)) {
             curr = curr.right;
         }
 
@@ -476,43 +476,10 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
     public static void main(String[] args) {
         RedBlackTree<Integer> tree = new RedBlackTree<>();
         tree.add(10);
-        System.out.println(tree.contains(10));
-        tree.add(5);
+        tree.add(0);
+        tree.add(20);
         tree.add(15);
-        System.out.println(tree.inorderTraverse());
-        System.out.println(tree.size);
-        System.out.println(tree);
-        tree.remove(10);
-        tree.remove(15);
-        System.out.println(tree.size);
-        System.out.println(tree);
-        tree.remove(5);
-        System.out.println(tree.size);
-        System.out.println(tree);
-        tree.add(15);
-        System.out.println(tree.size);
-        System.out.println(tree);
-
-        System.out.println("------------");
-        Random rnd = new Random();
-        tree = new RedBlackTree<>();
-        for (int i = 0; i < 15; i++) {
-            tree.add(rnd.nextInt(50));
-        }
-        System.out.println(tree.inorderTraverse());
-
-        for (int i : tree.inorderTraverse()) {
-            System.out.println(i);
-        }
-
-        tree = new RedBlackTree<>((v1, v2) -> {
-            // Even first
-            final int c = Integer.compare(v1 % 2, v2 % 2);
-            return c != 0 ? c : Integer.compare(v1, v2);
-        });
-        for (int i = 0; i < 15; i++) {
-            tree.add(rnd.nextInt(50));
-        }
-        System.out.println(tree.inorderTraverse());
+        System.out.println(tree.first());
+        System.out.println(tree.last());
     }
 }
