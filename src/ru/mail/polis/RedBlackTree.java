@@ -34,6 +34,20 @@ public class RedBlackTree<T extends Comparable<T>> implements ISortedSet<T> {
                     right == temp.right && parent == temp.parent &&
                     color == temp.color;
         }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("N{");
+            sb.append("d=").append(data);
+            if (left != null) {
+                sb.append(", l=").append(left);
+            }
+            if (right != null) {
+                sb.append(", r=").append(right);
+            }
+            sb.append('}');
+            return sb.toString();
+        }
     }
 
     public RedBlackTree() {
